@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Modèle IFC T1 — Fissure simulée — Monument André Cools</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a1628;font-family:sans-serif;overflow:hidden}
+canvas{display:block;width:100vw;height:100vh}
+.back{position:fixed;top:16px;right:16px;z-index:100;background:rgba(10,22,40,0.9);border:1px solid rgba(30,95,168,0.5);color:#e8f0f8;padding:8px 16px;border-radius:4px;font-size:12px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.5px}
+.back:hover{background:#1e5fa8;color:#fff}
+.info{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);color:#8fa3b8;padding:8px 20px;border-radius:4px;font-size:12px;text-align:center;white-space:nowrap;z-index:100}
+.stats{position:fixed;top:16px;left:16px;background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);border-radius:4px;padding:10px 14px;font-size:11px;color:#8fa3b8;line-height:1.8;z-index:100;max-width:260px}
+.stats strong{color:#f0b429;font-size:13px;display:block;margin-bottom:4px}
+.badge-fissure{display:inline-block;background:rgba(255,80,80,0.2);border:1px solid rgba(255,80,80,0.5);color:#ff6060;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.props{position:fixed;top:80px;right:16px;background:rgba(10,22,40,0.95);border:1px solid rgba(30,95,168,0.4);border-radius:6px;padding:12px 16px;font-size:11px;color:#8fa3b8;line-height:1.8;z-index:100;width:270px;display:none}
+.props h4{color:#2980d4;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;border-bottom:1px solid rgba(30,95,168,0.3);padding-bottom:6px}
+.prop-row{display:flex;justify-content:space-between;gap:8px;padding:2px 0;flex-wrap:wrap}
+.prop-key{color:#8fa3b8;flex-shrink:0;font-size:10px}
+.prop-val{color:#e8f0f8;font-weight:600;text-align:right;font-size:10px}
+.prop-dt{color:#f0b429}
+.prop-alert{color:#ff6060}
+.legend{position:fixed;bottom:50px;left:16px;background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);border-radius:4px;padding:8px 12px;font-size:11px;color:#8fa3b8;z-index:100}
+.legend-item{display:flex;align-items:center;gap:6px;margin:2px 0}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+/* Bannière d'information T1 */
+.banner{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,0.97);border-bottom:2px solid rgba(255,80,80,0.5);padding:0;display:flex;align-items:stretch}
+.banner-content{flex:1;padding:16px 2rem;display:flex;align-items:center;gap:1.5rem}
+.banner-icon{font-size:28px;flex-shrink:0}
+.banner-text{flex:1}
+.banner-title{font-size:14px;font-weight:700;color:#ff6060;font-family:sans-serif;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:4px}
+.banner-desc{font-size:12px;color:#8fa3b8;line-height:1.6}
+.banner-desc span{color:#f0b429;font-weight:600}
+.banner-stats{display:flex;gap:1rem;flex-shrink:0}
+.bstat{text-align:center;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.3);border-radius:4px;padding:6px 12px}
+.bstat-val{font-size:16px;font-weight:700;color:#ff6060;display:block}
+.bstat-lbl{font-size:10px;color:#8fa3b8;text-transform:uppercase;letter-spacing:0.5px}
+.banner-close{background:none;border:none;color:#8fa3b8;font-size:20px;cursor:pointer;padding:16px;flex-shrink:0}
+.banner-close:hover{color:#fff}
+</style>
+</head>
+<body>
+
+<!-- Bannière d'information T1 -->
+<div class="banner" id="banner">
+  <div class="banner-content">
+    <div class="banner-icon">⚠️</div>
+    <div class="banner-text">
+      <div class="banner-title">État T1 — Fissure simulée détectée</div>
+      <div class="banner-desc">
+        Ce modèle représente l'état <span>T1 (07/05/2026)</span> du monument avec une fissure fictive simulée sur l'arête <span>Est/Sud</span> à <span>975 mm</span> de hauteur.
+        Le paramètre <span>DT_Commentaire_Pathologie</span> a été mis à jour pour refléter cette pathologie.
+        Comparez avec le modèle T0 (sans fissure) via l'onglet "Modèle IFC" de la page principale.
+      </div>
+    </div>
+    <div class="banner-stats">
+      <div class="bstat"><span class="bstat-val">40.6mm</span><span class="bstat-lbl">Écart max</span></div>
+      <div class="bstat"><span class="bstat-val">500mm</span><span class="bstat-lbl">Longueur</span></div>
+      <div class="bstat"><span class="bstat-val">993</span><span class="bstat-lbl">Points affectés</span></div>
+    </div>
+  </div>
+  <button class="banner-close" onclick="document.getElementById('banner').style.display='none'">✕</button>
+</div>
+
+<a class="back" href="index.html" style="top:80px">← Retour au site</a>
+<div class="stats" style="top:80px">
+  <strong>Monument André Cools — IFC4 T1</strong>
+  État : <span style="color:#ff6060">Fissure détectée</span><br>
+  Arête Est/Sud · Hauteur 975mm<br>
+  Écart max : 40.6mm<br>
+  <span class="badge-fissure">⚠ Pathologie simulée</span>
+</div>
+<div class="legend" style="bottom:50px">
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab0cc"></div>Pierre bleue — Pyramide</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#cd7f32"></div>Bronze — Buste</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7a7a72"></div>Pavé — Placette</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff4444"></div>Zone fissure simulée</div>
+</div>
+<div class="props" id="props"><h4>Propriétés DT</h4><div id="props-content"></div></div>
+<div class="info">Clic gauche : rotation &nbsp;|&nbsp; Molette : zoom &nbsp;|&nbsp; Clic droit : déplacer &nbsp;|&nbsp; Clic sur élément : propriétés DT</div>
+<canvas id="c"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a1628);
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
+const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+sun.position.set(8, 6, 12);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0x4488cc, 0.3);
+fill.position.set(-8, -4, 4);
+scene.add(fill);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.01, 200);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'), antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+
+let sph={t:0.6,p:1.0,r:14},tgt=new THREE.Vector3(0,0,1.2),drag=false,rdrag=false,pm={x:0,y:0};
+function cam(){camera.position.set(tgt.x+sph.r*Math.sin(sph.p)*Math.sin(sph.t),tgt.y+sph.r*Math.sin(sph.p)*Math.cos(sph.t),tgt.z+sph.r*Math.cos(sph.p));camera.lookAt(tgt);camera.up.set(0,0,1);}
+cam();
+const cv=document.getElementById('c');
+cv.addEventListener('mousedown',e=>{if(e.button===0)drag=true;if(e.button===2)rdrag=true;pm={x:e.clientX,y:e.clientY};});
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+window.addEventListener('mouseup',()=>{drag=false;rdrag=false;});
+window.addEventListener('mousemove',e=>{
+  const dx=e.clientX-pm.x,dy=e.clientY-pm.y;
+  if(drag){sph.t-=dx*0.005;sph.p=Math.max(0.05,Math.min(Math.PI-0.05,sph.p+dy*0.005));}
+  if(rdrag){const r=new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(camera.position,tgt).normalize(),new THREE.Vector3(0,0,1)).normalize();tgt.addScaledVector(r,-dx*0.008);tgt.z+=dy*0.008;}
+  pm={x:e.clientX,y:e.clientY};cam();
+});
+cv.addEventListener('wheel',e=>{sph.r=Math.max(2,Math.min(50,sph.r+e.deltaY*0.02));cam();e.preventDefault();},{passive:false});
+
+// Matériaux
+const mPyramide=new THREE.MeshPhongMaterial({color:0x7ab0cc,shininess:40,specular:0x224466,side:THREE.DoubleSide});
+const mBuste=new THREE.MeshPhongMaterial({color:0xcd7f32,shininess:90,specular:0x664422});
+const mPlacette=new THREE.MeshPhongMaterial({color:0x7a7a72,shininess:5});
+const mFissure=new THREE.MeshPhongMaterial({color:0xff3333,shininess:20,emissive:0x330000});
+
+// Pyramide
+const s=3.0,h=2.472,rv=s/Math.sqrt(3);
+const v0=new THREE.Vector3(0,rv,0),v1=new THREE.Vector3(-s/2,-rv/2,0),v2=new THREE.Vector3(s/2,-rv/2,0),apex=new THREE.Vector3(0,0,h);
+const pyramideGeo=new THREE.BufferGeometry();
+const verts=new Float32Array([v0.x,v0.y,v0.z,v2.x,v2.y,v2.z,apex.x,apex.y,apex.z,v2.x,v2.y,v2.z,v1.x,v1.y,v1.z,apex.x,apex.y,apex.z,v1.x,v1.y,v1.z,v0.x,v0.y,v0.z,apex.x,apex.y,apex.z,v0.x,v0.y,v0.z,v1.x,v1.y,v1.z,v2.x,v2.y,v2.z]);
+pyramideGeo.setAttribute('position',new THREE.BufferAttribute(verts,3));
+pyramideGeo.computeVertexNormals();
+const pyramide=new THREE.Mesh(pyramideGeo,mPyramide);
+pyramide.userData={type:'pyramide',name:'Pyramide André Cools'};
+scene.add(pyramide);
+
+// Buste
+const busteMidZ=(0.93+1.57)/2,busteH=0.64;
+const edgeDir=new THREE.Vector3().subVectors(v2,v0).normalize();
+const edge1=new THREE.Vector3().subVectors(v2,v0),edge2=new THREE.Vector3().subVectors(apex,v0);
+const faceNorm=new THREE.Vector3().crossVectors(edge1,edge2).normalize();
+if(faceNorm.y>0)faceNorm.negate();
+const faceUp=new THREE.Vector3().crossVectors(faceNorm,edgeDir).normalize();
+const t_b=busteMidZ/h;
+const p0b=new THREE.Vector3(v0.x*(1-t_b),v0.y*(1-t_b),busteMidZ),p2b=new THREE.Vector3(v2.x*(1-t_b),v2.y*(1-t_b),busteMidZ);
+const facePt=new THREE.Vector3().addVectors(p0b,p2b).multiplyScalar(0.5);
+const bWb=0.72,bWt=0.52,bHh=busteH/2,bD=0.12;
+const tV=new Float32Array([-bWb/2,-bD/2,-bHh,bWb/2,-bD/2,-bHh,bWt/2,-bD/2,bHh,-bWt/2,-bD/2,bHh,-bWb/2,bD/2,-bHh,bWb/2,bD/2,-bHh,bWt/2,bD/2,bHh,-bWt/2,bD/2,bHh]);
+const tI=new Uint16Array([0,1,2,0,2,3,5,4,7,5,7,6,4,0,3,4,3,7,1,5,6,1,6,2,4,5,1,4,1,0,3,2,6,3,6,7]);
+const busteGeo=new THREE.BufferGeometry();
+busteGeo.setAttribute('position',new THREE.BufferAttribute(tV,3));
+busteGeo.setIndex(new THREE.BufferAttribute(tI,1));
+busteGeo.computeVertexNormals();
+const buste=new THREE.Mesh(busteGeo,mBuste);
+buste.position.set(facePt.x-faceNorm.x*0.08,facePt.y-faceNorm.y*0.08,facePt.z-faceNorm.z*0.08);
+const mmat=new THREE.Matrix4().makeBasis(edgeDir,faceNorm.clone().negate(),faceUp);
+buste.setRotationFromMatrix(mmat);
+buste.userData={type:'buste',name:'Buste André Cools'};
+scene.add(buste);
+
+// Placette
+const placetteGeo=new THREE.CylinderGeometry(4.8,4.8,0.25,64);
+const placette=new THREE.Mesh(placetteGeo,mPlacette);
+placette.rotation.x=Math.PI/2;placette.position.set(0,0,-0.125);
+placette.userData={type:'placette',name:'Placette circulaire'};
+scene.add(placette);
+
+// Grille
+const grid=new THREE.GridHelper(14,14,0x1e5fa8,0x0d2240);
+grid.rotation.x=Math.PI/2;grid.position.z=-0.26;
+scene.add(grid);
+
+// --- FISSURE SIMULÉE sur arête droite vue du buste ---
+// Vue de face buste : arête DROITE = entre v0(haut gauche) et apex
+// car v0 est en haut, v2 en bas droite, v1 en bas gauche
+// L'arête droite vue de face = v0->apex (côté gauche en plan mais droit vu de face)
+const fissureZ = 0.975;
+const fissureL = 0.50;
+const t_centre = fissureZ / h;
+
+// Arête v0->apex
+const pt_centre = new THREE.Vector3(
+  v0.x*(1-t_centre) + apex.x*t_centre,
+  v0.y*(1-t_centre) + apex.y*t_centre,
+  fissureZ
+);
+const dir_arete = new THREE.Vector3().subVectors(apex, v0).normalize();
+
+const fissurePath = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(pt_centre.x-dir_arete.x*(fissureL/2), pt_centre.y-dir_arete.y*(fissureL/2), pt_centre.z-dir_arete.z*(fissureL/2)),
+  pt_centre.clone(),
+  new THREE.Vector3(pt_centre.x+dir_arete.x*(fissureL/2), pt_centre.y+dir_arete.y*(fissureL/2), pt_centre.z+dir_arete.z*(fissureL/2))
+]);
+const fissureGeo = new THREE.TubeGeometry(fissurePath, 20, 0.030, 8, false);
+const fissureMesh = new THREE.Mesh(fissureGeo, mFissure);
+fissureMesh.userData = {type:'fissure', name:'Fissure simulée T1'};
+scene.add(fissureMesh);
+
+const pointLight = new THREE.PointLight(0xff3333, 2.0, 2.0);
+pointLight.position.copy(pt_centre);
+scene.add(pointLight);
+
+// DT Data T1
+const dt={
+  pyramide:{
+    'Élément':'Pyramide André Cools','Matériau':'Pierre bleue de Belgique',
+    'DT_Date_Acquisition':'24/04/2026','DT_Scanner_Modele':'Trimble X7',
+    'DT_Precision_RMSE_mm':'1.529','DT_Etat_Structure':'À surveiller',
+    'DT_LOD':'LOD 350',
+    'DT_Commentaire_Pathologie':'Fissure simulée — Arête Est/Sud — H:975mm — Écart max:40.6mm — 07/05/2026'
+  },
+  buste:{
+    'Élément':'Buste André Cools','Matériau':'Bronze',
+    'DT_Date_Acquisition':'24/04/2026','DT_Scanner_Modele':'Trimble X7',
+    'DT_Precision_RMSE_mm':'1.529','DT_Etat_Structure':'Bon',
+    'DT_LOD':'LOD 200','DT_Commentaire_Pathologie':'RAS'
+  },
+  placette:{
+    'Élément':'Placette circulaire','Matériau':'Pavé calcaire',
+    'DT_Date_Acquisition':'24/04/2026','DT_LOD':'LOD 300','DT_Etat_Structure':'Bon'
+  },
+  fissure:{
+    'Élément':'Fissure simulée T1',
+    'Position':'Arête Est/Sud',
+    'Hauteur':'975 mm',
+    'Longueur':'500 mm',
+    'Rayon':'60 mm',
+    'Profondeur max':'60 mm',
+    'Écart max (Python)':'40.6 mm',
+    'Écart max (CloudCompare)':'38.4 mm',
+    'Points affectés':'993',
+    'Date détection':'07/05/2026',
+    'Statut':'Simulation fictive — démonstration pipeline'
+  }
+};
+
+const clickables=[pyramide,buste,placette,fissureMesh];
+const origColors={};
+clickables.forEach(o=>{origColors[o.uuid]=o.material.color.clone();});
+let sel=null;
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();
+cv.addEventListener('click',e=>{
+  mouse.x=(e.clientX/innerWidth)*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse,camera);
+  const hits=ray.intersectObjects(clickables);
+  if(sel){sel.material.color.copy(origColors[sel.uuid]);sel=null;}
+  document.getElementById('props').style.display='none';
+  if(hits.length){
+    sel=hits[0].object;
+    sel.material.color.set(sel.userData.type==='fissure'?0xff8800:0xf0b429);
+    const d=dt[sel.userData.type];
+    if(!d)return;
+    let html='';
+    for(const[k,v] of Object.entries(d)){
+      const isAlert=k==='DT_Commentaire_Pathologie'&&v!=='RAS';
+      const isDT=k.startsWith('DT_')||k==='Écart'||k==='Date'||k==='Statut'||k==='Points';
+      html+=`<div class="prop-row"><span class="prop-key ${isAlert?'prop-alert':isDT?'prop-dt':''}">${k}</span><span class="prop-val ${isAlert?'prop-alert':isDT?'prop-dt':''}">${v}</span></div>`;
+    }
+    document.getElementById('props-content').innerHTML=html;
+    document.getElementById('props').style.display='block';
+  }
+});
+
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+(function anim(){requestAnimationFrame(anim);renderer.render(scene,camera);})();
+</script>
+</body>
+</html>

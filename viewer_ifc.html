@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Modèle IFC — Monument André Cools</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a1628;font-family:sans-serif;overflow:hidden}
+canvas{display:block;width:100vw;height:100vh}
+.back{position:fixed;top:16px;right:16px;z-index:100;background:rgba(10,22,40,0.9);border:1px solid rgba(30,95,168,0.5);color:#e8f0f8;padding:8px 16px;border-radius:4px;font-size:12px;font-weight:600;text-decoration:none;text-transform:uppercase;letter-spacing:0.5px}
+.back:hover{background:#1e5fa8;color:#fff}
+.info{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);color:#8fa3b8;padding:8px 20px;border-radius:4px;font-size:12px;text-align:center;white-space:nowrap;z-index:100}
+.stats{position:fixed;top:16px;left:16px;background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);border-radius:4px;padding:10px 14px;font-size:11px;color:#8fa3b8;line-height:1.8;z-index:100}
+.stats strong{color:#f0b429;font-size:13px;display:block;margin-bottom:4px}
+.props{position:fixed;top:80px;right:16px;background:rgba(10,22,40,0.95);border:1px solid rgba(30,95,168,0.4);border-radius:6px;padding:12px 16px;font-size:11px;color:#8fa3b8;line-height:1.8;z-index:100;width:260px;display:none}
+.props h4{color:#2980d4;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;border-bottom:1px solid rgba(30,95,168,0.3);padding-bottom:6px}
+.prop-row{display:flex;justify-content:space-between;gap:8px;padding:2px 0}
+.prop-key{color:#8fa3b8;flex-shrink:0}
+.prop-val{color:#e8f0f8;font-weight:600;text-align:right}
+.prop-dt{color:#f0b429}
+.legend{position:fixed;bottom:50px;left:16px;background:rgba(10,22,40,0.85);border:1px solid rgba(30,95,168,0.3);border-radius:4px;padding:8px 12px;font-size:11px;color:#8fa3b8;z-index:100}
+.legend-item{display:flex;align-items:center;gap:6px;margin:2px 0}
+.legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+</style>
+</head>
+<body>
+<a class="back" href="index.html">← Retour au site</a>
+<div class="stats">
+  <strong>Monument André Cools — IFC4</strong>
+  Pyramide · Buste · Placette<br>
+  7 paramètres DT · LOD 200-350
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#7ab0cc"></div>Pierre bleue — Pyramide</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#cd7f32"></div>Bronze — Buste</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7a7a72"></div>Pavé — Placette</div>
+</div>
+<div class="props" id="props"><h4>Propriétés DT</h4><div id="props-content"></div></div>
+<div class="info">Clic gauche : rotation &nbsp;|&nbsp; Molette : zoom &nbsp;|&nbsp; Clic droit : déplacer &nbsp;|&nbsp; Clic sur élément : propriétés DT</div>
+<canvas id="c"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a1628);
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambient);
+const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+sun.position.set(8, 6, 12);
+scene.add(sun);
+const fill = new THREE.DirectionalLight(0x4488cc, 0.3);
+fill.position.set(-8, -4, 4);
+scene.add(fill);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.01, 200);
+const renderer = new THREE.WebGLRenderer({canvas:document.getElementById('c'), antialias:true});
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(devicePixelRatio);
+
+// Orbit
+let sph = {t:0.6, p:1.0, r:14};
+let tgt = new THREE.Vector3(0, 0, 1.2);
+let drag=false, rdrag=false, pm={x:0,y:0};
+function cam(){
+  camera.position.set(
+    tgt.x+sph.r*Math.sin(sph.p)*Math.sin(sph.t),
+    tgt.y+sph.r*Math.sin(sph.p)*Math.cos(sph.t),
+    tgt.z+sph.r*Math.cos(sph.p));
+  camera.lookAt(tgt);
+  camera.up.set(0,0,1);
+}
+cam();
+const cv=document.getElementById('c');
+cv.addEventListener('mousedown',e=>{if(e.button===0)drag=true;if(e.button===2)rdrag=true;pm={x:e.clientX,y:e.clientY};});
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+window.addEventListener('mouseup',()=>{drag=false;rdrag=false;});
+window.addEventListener('mousemove',e=>{
+  const dx=e.clientX-pm.x,dy=e.clientY-pm.y;
+  if(drag){sph.t-=dx*0.005;sph.p=Math.max(0.05,Math.min(Math.PI-0.05,sph.p+dy*0.005));}
+  if(rdrag){
+    const r=new THREE.Vector3().crossVectors(new THREE.Vector3().subVectors(camera.position,tgt).normalize(),new THREE.Vector3(0,0,1)).normalize();
+    tgt.addScaledVector(r,-dx*0.008);tgt.z+=dy*0.008;
+  }
+  pm={x:e.clientX,y:e.clientY};cam();
+});
+cv.addEventListener('wheel',e=>{sph.r=Math.max(2,Math.min(50,sph.r+e.deltaY*0.02));cam();e.preventDefault();},{passive:false});
+
+// Matériaux
+const mPyramide = new THREE.MeshPhongMaterial({color:0x7ab0cc,shininess:40,specular:0x224466,side:THREE.DoubleSide});
+const mBuste = new THREE.MeshPhongMaterial({color:0xcd7f32,shininess:90,specular:0x664422});
+const mPlacette = new THREE.MeshPhongMaterial({color:0x7a7a72,shininess:5});
+
+// --- PYRAMIDE TÉTRAÈDRE à base triangulaire équilatérale ---
+// Base triangle équilatéral côté ~3m, hauteur 2.472m
+const s = 3.0; // côté base
+const h = 2.472; // hauteur
+const r = s / Math.sqrt(3); // rayon cercle circonscrit base
+
+const v0 = new THREE.Vector3(0, r, 0);
+const v1 = new THREE.Vector3(-s/2, -r/2, 0);
+const v2 = new THREE.Vector3(s/2, -r/2, 0);
+const apex = new THREE.Vector3(0, 0, h);
+
+const pyramideGeo = new THREE.BufferGeometry();
+const verts = new Float32Array([
+  // Face avant (vers utilisateur)
+  v0.x,v0.y,v0.z, v2.x,v2.y,v2.z, apex.x,apex.y,apex.z,
+  // Face droite
+  v2.x,v2.y,v2.z, v1.x,v1.y,v1.z, apex.x,apex.y,apex.z,
+  // Face gauche
+  v1.x,v1.y,v1.z, v0.x,v0.y,v0.z, apex.x,apex.y,apex.z,
+  // Base
+  v0.x,v0.y,v0.z, v1.x,v1.y,v1.z, v2.x,v2.y,v2.z,
+]);
+pyramideGeo.setAttribute('position', new THREE.BufferAttribute(verts,3));
+pyramideGeo.computeVertexNormals();
+const pyramide = new THREE.Mesh(pyramideGeo, mPyramide);
+pyramide.userData = {type:'pyramide', name:'Pyramide André Cools'};
+scene.add(pyramide);
+
+// --- BUSTE sur la face principale ---
+const busteMidZ = (0.93 + 1.57) / 2;
+const busteH = 0.64;
+const busteW = 0.65;
+const busteD = 0.12;
+
+// Direction arête de base v0->v2
+const edgeDir = new THREE.Vector3().subVectors(v2, v0).normalize();
+
+// Normale complète de la face (inclut la pente verticale)
+const edge1 = new THREE.Vector3().subVectors(v2, v0);
+const edge2 = new THREE.Vector3().subVectors(apex, v0);
+const faceNorm = new THREE.Vector3().crossVectors(edge1, edge2).normalize();
+if(faceNorm.y > 0) faceNorm.negate();
+
+// Vecteur "up" sur la face = perpendiculaire à edgeDir ET dans le plan de la face
+const faceUp = new THREE.Vector3().crossVectors(faceNorm, edgeDir).normalize();
+
+// Centre de la face à hauteur buste
+const t_buste = busteMidZ / h;
+const p0b = new THREE.Vector3(v0.x*(1-t_buste), v0.y*(1-t_buste), busteMidZ);
+const p2b = new THREE.Vector3(v2.x*(1-t_buste), v2.y*(1-t_buste), busteMidZ);
+const facePt = new THREE.Vector3().addVectors(p0b, p2b).multiplyScalar(0.5);
+
+// Géométrie trapézoïdale (plus large en bas)
+const busteWbottom = 0.72; // largeur base
+const busteWtop = 0.52;    // largeur sommet
+const busteHh = busteH / 2;
+
+const trapVerts = new Float32Array([
+  // Face avant
+  -busteWbottom/2, -busteD/2, -busteHh,
+   busteWbottom/2, -busteD/2, -busteHh,
+   busteWtop/2,    -busteD/2,  busteHh,
+  -busteWtop/2,    -busteD/2,  busteHh,
+  // Face arrière
+  -busteWbottom/2,  busteD/2, -busteHh,
+   busteWbottom/2,  busteD/2, -busteHh,
+   busteWtop/2,     busteD/2,  busteHh,
+  -busteWtop/2,     busteD/2,  busteHh,
+]);
+const trapIdx = new Uint16Array([
+  0,1,2, 0,2,3,   // avant
+  5,4,7, 5,7,6,   // arrière
+  4,0,3, 4,3,7,   // gauche
+  1,5,6, 1,6,2,   // droite
+  4,5,1, 4,1,0,   // bas
+  3,2,6, 3,6,7,   // haut
+]);
+const busteGeo = new THREE.BufferGeometry();
+busteGeo.setAttribute('position', new THREE.BufferAttribute(trapVerts, 3));
+busteGeo.setIndex(new THREE.BufferAttribute(trapIdx, 1));
+busteGeo.computeVertexNormals();
+const buste = new THREE.Mesh(busteGeo, mBuste);
+
+// Position légèrement en saillie de la face
+buste.position.set(
+  facePt.x - faceNorm.x * 0.08,
+  facePt.y - faceNorm.y * 0.08,
+  facePt.z - faceNorm.z * 0.08
+);
+
+// Orientation : X=edgeDir (largeur), Y=faceNorm (profondeur/normale), Z=faceUp (hauteur sur la face)
+const m = new THREE.Matrix4().makeBasis(edgeDir, faceNorm.clone().negate(), faceUp);
+buste.setRotationFromMatrix(m);
+buste.userData = {type:'buste', name:'Buste André Cools'};
+buste.userData = {type:'buste', name:'Buste André Cools'};
+scene.add(buste);
+
+// --- PLACETTE circulaire ---
+const placetteGeo = new THREE.CylinderGeometry(4.8, 4.8, 0.25, 64);
+const placette = new THREE.Mesh(placetteGeo, mPlacette);
+placette.rotation.x = Math.PI/2;
+placette.position.set(0, 0, -0.125);
+placette.userData = {type:'placette', name:'Placette circulaire'};
+scene.add(placette);
+
+// Grille
+const grid = new THREE.GridHelper(14, 14, 0x1e5fa8, 0x0d2240);
+grid.rotation.x = Math.PI/2;
+grid.position.z = -0.26;
+scene.add(grid);
+
+// DT Data
+const dt = {
+  pyramide:{
+    'Élément':'Pyramide André Cools','Matériau':'Pierre bleue de Belgique',
+    'DT_Date_Acquisition':'24/04/2026','DT_Scanner_Modele':'Trimble X7',
+    'DT_Precision_RMSE_mm':'1.529','DT_Etat_Structure':'Bon',
+    'DT_LOD':'LOD 350','DT_Commentaire_Pathologie':'RAS'
+  },
+  buste:{
+    'Élément':'Buste André Cools','Matériau':'Bronze',
+    'DT_Date_Acquisition':'24/04/2026','DT_Scanner_Modele':'Trimble X7',
+    'DT_Precision_RMSE_mm':'1.529','DT_Etat_Structure':'Bon',
+    'DT_LOD':'LOD 200','DT_Commentaire_Pathologie':'RAS'
+  },
+  placette:{
+    'Élément':'Placette circulaire','Matériau':'Pavé calcaire',
+    'DT_Date_Acquisition':'24/04/2026','DT_LOD':'LOD 300','DT_Etat_Structure':'Bon'
+  }
+};
+
+const clickables = [pyramide, buste, placette];
+const origColors = {};
+clickables.forEach(m => origColors[m.uuid] = m.material.color.clone());
+let sel = null;
+
+const ray = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+cv.addEventListener('click', e => {
+  mouse.x=(e.clientX/innerWidth)*2-1;
+  mouse.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mouse, camera);
+  const hits = ray.intersectObjects(clickables);
+  if(sel){sel.material.color.copy(origColors[sel.uuid]);sel=null;}
+  if(hits.length){
+    sel = hits[0].object;
+    sel.material.color.set(0xf0b429);
+    const d = dt[sel.userData.type];
+    let html='';
+    for(const[k,v] of Object.entries(d)){
+      const isDT = k.startsWith('DT_');
+      html+=`<div class="prop-row"><span class="prop-key ${isDT?'prop-dt':''}">${k}</span><span class="prop-val ${isDT?'prop-dt':''}">${v}</span></div>`;
+    }
+    document.getElementById('props-content').innerHTML=html;
+    document.getElementById('props').style.display='block';
+  } else {
+    document.getElementById('props').style.display='none';
+  }
+});
+
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+(function anim(){requestAnimationFrame(anim);renderer.render(scene,camera);})();
+</script>
+</body>
+</html>

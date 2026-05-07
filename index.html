@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jumeau Numérique d'Instance — Monument André Cools</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a1628;--blue1:#0d2240;--blue2:#1a3a6b;--blue3:#1e5fa8;--blue4:#2980d4;--blue5:#5ba8e8;--accent:#f0b429;--white:#f8fafc;--textmuted:#8fa3b8;--text:#e8f0f8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Barlow',sans-serif;background:var(--navy);color:var(--text);min-height:100vh}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(30,95,168,0.3);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;color:var(--accent);text-transform:uppercase;white-space:nowrap}
+.nav-links{display:flex;list-style:none}
+.nav-links a{font-size:12px;font-weight:500;color:var(--textmuted);text-decoration:none;padding:0 0.9rem;height:60px;display:flex;align-items:center;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.5px;text-transform:uppercase;white-space:nowrap}
+.nav-links a:hover,.nav-links a.active{color:var(--white);border-bottom-color:var(--blue4)}
+.lang-switcher{display:flex;gap:4px}
+.lang-btn{background:none;border:1px solid rgba(30,95,168,0.4);color:var(--textmuted);padding:4px 10px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s}
+.lang-btn.active,.lang-btn:hover{background:var(--blue3);color:var(--white);border-color:var(--blue3)}
+section{padding:5rem 0;min-height:100vh;display:flex;align-items:center}
+.container{width:100%;max-width:100%;padding:0 5vw}
+#accueil{padding-top:60px;background:linear-gradient(135deg,var(--navy) 0%,var(--blue1) 60%,var(--navy) 100%)}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:4rem 0}
+.hero-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue4);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.hero-tag::before{content:'';width:24px;height:1px;background:var(--blue4)}
+h1{font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:700;line-height:1.05;color:var(--white);margin-bottom:1.5rem}
+h1 span{color:var(--blue4)}
+.hero-desc{font-size:14px;line-height:1.8;color:var(--textmuted);margin-bottom:2rem}
+.hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(30,95,168,0.2)}
+.stat-num{font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:700;color:var(--accent);line-height:1;text-align:center}
+.stat-lbl{font-size:11px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;text-align:center}
+.hero-img img{width:50%;height:auto;display:block;border-radius:8px;border:1px solid rgba(30,95,168,0.3);margin:0 auto}
+.hero-img-badge{margin-top:0.75rem;background:var(--blue2);border:1px solid var(--blue3);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--textmuted)}
+.hero-img-badge strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:15px;color:var(--accent)}
+.section-tag{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--blue4);margin-bottom:0.75rem;display:flex;align-items:center;gap:8px}
+.section-tag::before{content:'';width:24px;height:1px;background:var(--blue4)}
+h2{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:700;color:var(--white);margin-bottom:0.75rem}
+.section-sub{font-size:14px;color:var(--textmuted);margin-bottom:2.5rem}
+#pipeline{background:var(--blue1)}
+.pipeline-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(30,95,168,0.2);border-radius:8px;overflow:hidden}
+.pipeline-step{background:var(--blue1);padding:1.75rem 1.25rem}
+.step-num{font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:700;color:rgba(41,128,212,0.12);line-height:1;margin-bottom:0.5rem}
+.step-title{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.75rem}
+.step-note{font-size:12px;color:var(--textmuted);line-height:1.6}
+.step-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-top:0.75rem}
+.tag-acq{background:rgba(41,128,212,0.2);color:var(--blue5)}
+.tag-proc{background:rgba(240,180,41,0.15);color:var(--accent)}
+.tag-bim{background:rgba(29,158,117,0.15);color:#4ecba5}
+.tag-diff{background:rgba(180,41,240,0.15);color:#c47be8}
+#visualisation{background:var(--navy)}
+.visu-tabs{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid rgba(30,95,168,0.2)}
+.visu-tab{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--textmuted);padding:0.9rem 2rem;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none}
+.visu-tab:hover{color:var(--white)}
+.visu-tab.active{color:var(--white);border-bottom-color:var(--blue4)}
+.visu-panel{display:none}
+.visu-panel.active{display:block}
+.visu-card{background:var(--blue1);border:1px solid rgba(30,95,168,0.3);border-radius:8px;overflow:hidden}
+.visu-card-header{padding:0.9rem 1.5rem;border-bottom:1px solid rgba(30,95,168,0.2);display:flex;align-items:center;gap:8px}
+.visu-card-header span{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--white)}
+.visu-card-dot{width:8px;height:8px;border-radius:50%;background:var(--blue4);flex-shrink:0}
+.visu-note{font-size:12px;color:var(--textmuted);padding:0.75rem 1.5rem;border-top:1px solid rgba(30,95,168,0.15);font-style:italic}
+#telechargements{background:var(--blue1)}
+.dl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:2rem}
+.dl-card{background:var(--navy);border:1px solid rgba(30,95,168,0.25);border-radius:8px;padding:1.25rem;display:flex;flex-direction:column;transition:border-color 0.2s}
+.dl-card:hover{border-color:var(--blue3)}
+.dl-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem}
+.dl-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:0.75rem}
+.dl-format{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:var(--accent)}
+.dl-badge{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px}
+.badge-geo{background:rgba(41,128,212,0.2);color:var(--blue5)}
+.badge-bim{background:rgba(29,158,117,0.15);color:#4ecba5}
+.badge-dev{background:rgba(240,180,41,0.15);color:var(--accent)}
+.dl-title{font-weight:600;font-size:13px;color:var(--white);margin-bottom:0.4rem}
+.dl-desc{font-size:12px;color:var(--textmuted);line-height:1.6;margin-bottom:0.6rem;flex:1}
+.dl-compat{font-size:11px;color:var(--blue5);margin-bottom:0.9rem}
+.dl-compat strong{color:var(--textmuted)}
+.dl-btn{display:inline-flex;align-items:center;gap:6px;background:rgba(30,95,168,0.2);border:1px solid rgba(30,95,168,0.4);color:var(--white);padding:7px 14px;border-radius:4px;font-size:11px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.dl-btn:hover{background:var(--blue3);border-color:var(--blue3)}
+#analyse{background:var(--blue1)}
+#rapport{background:var(--navy)}
+.rapport-box{background:var(--blue1);border:1px solid rgba(30,95,168,0.3);border-radius:8px;overflow:hidden;max-width:900px;margin:2rem auto 0}
+.rapport-header{padding:1.25rem 1.75rem;border-bottom:1px solid rgba(30,95,168,0.2);display:flex;align-items:center;gap:1rem}
+.rapport-icon{width:44px;height:44px;background:rgba(240,180,41,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.rapport-meta h3{font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px}
+.rapport-meta p{font-size:11px;color:var(--textmuted)}
+.rapport-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(30,95,168,0.2)}
+.rstat{background:var(--blue1);padding:1rem;text-align:center}
+.rstat-val{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--accent)}
+.rstat-lbl{font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.rapport-body{padding:1.25rem 1.75rem}
+.rapport-steps{display:flex;flex-direction:column;gap:0.6rem}
+.rstep{display:flex;align-items:center;gap:1rem;padding:0.65rem 0.9rem;background:rgba(41,128,212,0.05);border-radius:4px;border-left:2px solid var(--blue3)}
+.rstep-num{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--blue4);min-width:20px}
+.rstep-title{font-size:12px;font-weight:600;color:var(--white)}
+.rstep-desc{font-size:11px;color:var(--textmuted)}
+.rstep-tag{font-size:10px;font-weight:600;color:var(--blue4);margin-left:auto;white-space:nowrap}
+footer{background:var(--blue1);border-top:1px solid rgba(30,95,168,0.3);padding:2rem 5vw}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.footer-logos{display:flex;align-items:center;gap:1.5rem}
+.footer-logos img{height:44px;object-fit:contain}
+.footer-divider{width:1px;height:44px;background:rgba(30,95,168,0.3)}
+.footer-text{font-size:12px;color:var(--textmuted);line-height:1.8}
+.footer-text strong{color:var(--white)}
+.en{display:none}
+body.lang-en .fr{display:none}
+body.lang-en .en{display:block}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">TFE 2026 — Jumeau Numérique</div>
+  <ul class="nav-links">
+    <li><a href="#accueil" class="active" id="nav-home">Accueil</a></li>
+    <li><a href="#pipeline" id="nav-pipeline">Pipeline</a></li>
+    <li><a href="#visualisation" id="nav-visu">Visualisation 3D</a></li>
+    <li><a href="#telechargements" id="nav-dl">Téléchargements</a></li>
+    <li><a href="#analyse" id="nav-analyse">Analyse T0→T1</a></li>
+    <li><a href="#rapport" id="nav-rapport">Rapport</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<section id="accueil">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-tag fr">TFE · Master Ingénieur Industriel Géomètre · HEPL 2026</div>
+        <div class="hero-tag en">Thesis · Master Industrial Surveying Engineer · HEPL 2026</div>
+        <h1 class="fr">Jumeau Numérique <span>d'Instance</span><br>Monument André Cools</h1>
+        <h1 class="en">Instance <span>Digital Twin</span><br>André Cools Monument</h1>
+        <p class="hero-desc fr">Démonstration d'un pipeline complet de création d'un jumeau numérique d'instance pour l'ingénieur-géomètre : du relevé TLS terrain jusqu'à la diffusion web, en passant par le traitement algorithmique Python et la modélisation BIM sémantisée sous Revit.</p>
+        <p class="hero-desc en">A complete pipeline demonstration for creating an instance digital twin for the surveying engineer: from TLS field survey to web diffusion, through automated Python processing and semantic BIM modelling in Revit.</p>
+        <div class="hero-stats">
+          <div><div class="stat-num">6M+</div><div class="stat-lbl fr">Points traités</div><div class="stat-lbl en">Points processed</div></div>
+          <div><div class="stat-num">1.5mm</div><div class="stat-lbl fr">Précision RMSE</div><div class="stat-lbl en">RMSE accuracy</div></div>
+          <div><div class="stat-num">IFC4</div><div class="stat-lbl fr">Export standard</div><div class="stat-lbl en">Standard export</div></div>
+        </div>
+      </div>
+      <div class="hero-img">
+        <img src="images/photo1.jpg" alt="Monument André Cools">
+        <div class="hero-img-badge">
+          <strong>Flémalle-Haute, Liège</strong>
+          <span class="fr">Parc communal · Relevé TLS 24/04/2026</span>
+          <span class="en">Municipal park · TLS survey 24/04/2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="container">
+    <div class="section-tag fr">Méthodologie</div>
+    <div class="section-tag en">Methodology</div>
+    <h2 class="fr">Pipeline en 4 phases</h2>
+    <h2 class="en">4-phase pipeline</h2>
+    <p class="section-sub fr">De l'acquisition terrain à la diffusion web — chaque phase est documentée dans le mémoire complet.</p>
+    <p class="section-sub en">From field acquisition to web diffusion — each phase is documented in the full thesis.</p>
+    <div class="pipeline-steps">
+      <div class="pipeline-step">
+        <div class="step-num">01</div>
+        <div class="step-title fr">Acquisition</div><div class="step-title en">Acquisition</div>
+        <div class="step-note fr">Relevé TLS Trimble X7 · 6 stations · Cibles sphériques · Géoréférencement Lambert 2008</div>
+        <div class="step-note en">TLS Trimble X7 survey · 6 stations · Spherical targets · Lambert 2008 georef</div>
+        <span class="step-tag tag-acq">Trimble X7</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">02</div>
+        <div class="step-title fr">Traitement</div><div class="step-title en">Processing</div>
+        <div class="step-note fr">Pipeline Python automatisé · Filtrage SOR · Décimation Voxel Grid 5mm · RMSE 1.529mm</div>
+        <div class="step-note en">Automated Python pipeline · SOR filtering · 5mm Voxel Grid · RMSE 1.529mm</div>
+        <span class="step-tag tag-proc">Python · Open3D</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">03</div>
+        <div class="step-title fr">Modélisation BIM</div><div class="step-title en">BIM Modelling</div>
+        <div class="step-note fr">Scan-to-BIM Revit · Paramètres DT · Matériaux · IFC4 · Dashboard jumeau numérique</div>
+        <div class="step-note en">Revit Scan-to-BIM · DT parameters · Materials · IFC4 · Digital twin dashboard</div>
+        <span class="step-tag tag-bim">Revit · IFC4</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">04</div>
+        <div class="step-title fr">Analyse T0→T1</div><div class="step-title en">T0→T1 Analysis</div>
+        <div class="step-note fr">Simulation fissure Python · Comparaison cloud-to-cloud · Validation CloudCompare · Mise à jour paramètres DT</div>
+        <div class="step-note en">Python crack simulation · Cloud-to-cloud comparison · CloudCompare validation · DT parameters update</div>
+        <span class="step-tag" style="background:rgba(255,80,80,0.15);color:#ff8080">Python · CloudCompare</span>
+      </div>
+      <div class="pipeline-step">
+        <div class="step-num">05</div>
+        <div class="step-title fr">Diffusion</div><div class="step-title en">Diffusion</div>
+        <div class="step-note fr">Visualisation web · Viewers 3D interactifs · Téléchargements 8 formats · Site multilingue</div>
+        <div class="step-note en">Web visualisation · Interactive 3D viewers · 8-format downloads · Multilingual site</div>
+        <span class="step-tag tag-diff">Web · Three.js</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem">
+      <img src="images/photo2.jpg" alt="Scanner Trimble X7" style="width:100%;height:auto;display:block;border-radius:6px;border:1px solid rgba(30,95,168,0.2)">
+      <img src="images/photo3.jpg" alt="Vue latérale" style="width:100%;height:auto;display:block;border-radius:6px;border:1px solid rgba(30,95,168,0.2)">
+    </div>
+  </div>
+</section>
+
+<section id="visualisation">
+  <div class="container">
+    <div class="section-tag fr">Modèle numérique</div>
+    <div class="section-tag en">Digital model</div>
+    <h2 class="fr">Visualisation 3D interactive</h2>
+    <h2 class="en">Interactive 3D visualisation</h2>
+    <p class="section-sub fr">Choisissez la visualisation souhaitée — modèle BIM ou nuage de points.</p>
+    <p class="section-sub en">Choose your visualisation — BIM model or point cloud.</p>
+    <div class="visu-tabs">
+      <button class="visu-tab active fr" onclick="switchVisu('ifc')">Modèle IFC — Jumeau numérique</button>
+      <button class="visu-tab active en" onclick="switchVisu('ifc')" style="display:none">IFC Model — Digital twin</button>
+      <button class="visu-tab fr" onclick="switchVisu('potree')">Nuage de points — 3D</button>
+      <button class="visu-tab en" onclick="switchVisu('potree')" style="display:none">Point cloud — 3D</button>
+      <button class="visu-tab fr" onclick="switchVisu('ifc_t1')" style="color:#ff6060">Modèle IFC — T1 Fissure ⚠</button>
+      <button class="visu-tab en" onclick="switchVisu('ifc_t1')" style="display:none;color:#ff6060">IFC Model — T1 Crack ⚠</button>
+      <button class="visu-tab fr" onclick="switchVisu('nuage_t1')" style="color:#ff8800">Nuage de points — T1 Fissure</button>
+      <button class="visu-tab en" onclick="switchVisu('nuage_t1')" style="display:none;color:#ff8800">Point cloud — T1 Crack</button>
+    </div>
+    <div id="panel-ifc" class="visu-panel active">
+      <div class="visu-card">
+        <div class="visu-card-header">
+          <div class="visu-card-dot"></div>
+          <span class="fr">Modèle IFC — Pyramide André Cools — Jumeau numérique d'instance</span>
+          <span class="en">IFC Model — André Cools Pyramid — Instance digital twin</span>
+        </div>
+        <div style="padding:0;line-height:0">
+          <iframe src="viewer_ifc.html" style="width:100%;height:550px;border:none;display:block"></iframe>
+        </div>
+        <div class="visu-note fr">Pyramide (LOD 350) · Buste André Cools (LOD 200) · Placette — 7 paramètres DT · Export IFC4 · Clic sur un élément pour les propriétés</div>
+        <div class="visu-note en">Pyramid (LOD 350) · André Cools bust (LOD 200) · Esplanade — 7 DT parameters · IFC4 export · Click element for properties</div>
+      </div>
+    </div>
+    <div id="panel-potree" class="visu-panel">
+      <div class="visu-card">
+        <div class="visu-card-header">
+          <div class="visu-card-dot" style="background:#4ecba5"></div>
+          <span class="fr">Nuage de points 3D interactif — 367 996 points — Three.js</span>
+          <span class="en">Interactive 3D point cloud — 367,996 points — Three.js</span>
+        </div>
+        <div style="padding:0;line-height:0">
+          <iframe src="viewer3d_standalone.html" style="width:100%;height:550px;border:none;display:block"></iframe>
+        </div>
+        <div class="visu-note fr">367 996 points · Voxel Grid 20mm · RMSE 1.529mm · Trimble X7 · 24/04/2026 · Three.js</div>
+        <div class="visu-note en">367,996 points · 20mm Voxel Grid · RMSE 1.529mm · Trimble X7 · 24/04/2026 · Three.js</div>
+      </div>
+    </div>
+    <div id="panel-ifc_t1" class="visu-panel">
+      <div class="visu-card">
+        <div class="visu-card-header">
+          <div class="visu-card-dot" style="background:#ff4444"></div>
+          <span class="fr">Modèle IFC T1 — Fissure simulée — Arête Est/Sud — 07/05/2026</span>
+          <span class="en">IFC Model T1 — Simulated crack — Est/Sud edge — 07/05/2026</span>
+        </div>
+        <div style="padding:0;line-height:0">
+          <iframe src="viewer_ifc_fissure.html" style="width:100%;height:550px;border:none;display:block"></iframe>
+        </div>
+        <div class="visu-note fr">DT_Commentaire_Pathologie mis à jour · DT_Etat_Structure : À surveiller · Écart max : 40.6mm · Clic sur la fissure rouge pour les détails</div>
+        <div class="visu-note en">DT_Commentaire_Pathologie updated · DT_Etat_Structure: To monitor · Max gap: 40.6mm · Click red crack for details</div>
+      </div>
+    </div>
+    <div id="panel-nuage_t1" class="visu-panel">
+      <div class="visu-card">
+        <div class="visu-card-header">
+          <div class="visu-card-dot" style="background:#ff6600"></div>
+          <span class="fr">Nuage de points T1 — Fissure simulée orange — Pipeline Python Open3D</span>
+          <span class="en">Point cloud T1 — Simulated orange crack — Python Open3D pipeline</span>
+        </div>
+        <div style="padding:0;line-height:0">
+          <iframe src="viewer3d_standalone_fissure.html" style="width:100%;height:550px;border:none;display:block"></iframe>
+        </div>
+        <div class="visu-note fr">993 points affectés · Écart max Python : 40.6mm · CloudCompare : 38.4mm · Orange = fissure · Jaune = bords</div>
+        <div class="visu-note en">993 affected points · Max gap Python: 40.6mm · CloudCompare: 38.4mm · Orange = crack · Yellow = edges</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="analyse">
+  <div class="container">
+    <div class="section-tag fr">Analyse multi-temporelle</div>
+    <div class="section-tag en">Multi-temporal analysis</div>
+    <h2 class="fr">Comparaison T0 → T1</h2>
+    <h2 class="en">T0 → T1 Comparison</h2>
+    <p class="section-sub fr">Démonstration du pipeline de détection de pathologies par comparaison cloud-to-cloud entre deux états temporels.</p>
+    <p class="section-sub en">Demonstration of pathology detection pipeline by cloud-to-cloud comparison between two temporal states.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem">
+      <div style="background:var(--blue1);border:1px solid rgba(30,95,168,0.3);border-radius:8px;padding:1.5rem">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#4ecba5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1rem" class="fr">État T0 — Référence</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#4ecba5;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1rem" class="en">State T0 — Reference</div>
+        <div style="font-size:12px;color:var(--textmuted);line-height:1.8" class="fr">Relevé TLS du 24/04/2026<br>6 049 509 points · RMSE 1.529mm<br>DT_Commentaire_Pathologie : <span style="color:#4ecba5">RAS</span><br>DT_Etat_Structure : <span style="color:#4ecba5">Bon</span></div>
+        <div style="font-size:12px;color:var(--textmuted);line-height:1.8" class="en">TLS survey 24/04/2026<br>6,049,509 points · RMSE 1.529mm<br>DT_Commentaire_Pathologie: <span style="color:#4ecba5">N/A</span><br>DT_Etat_Structure: <span style="color:#4ecba5">Good</span></div>
+      </div>
+      <div style="background:var(--blue1);border:1px solid rgba(255,80,80,0.4);border-radius:8px;padding:1.5rem">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#ff6060;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1rem" class="fr">État T1 — Fissure simulée ⚠</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#ff6060;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:1rem" class="en">State T1 — Simulated crack ⚠</div>
+        <div style="font-size:12px;color:var(--textmuted);line-height:1.8" class="fr">Simulation Python du 07/05/2026<br>6 049 509 points · Fissure arête Est/Sud<br>DT_Commentaire_Pathologie : <span style="color:#ff6060">Fissure détectée — H:975mm</span><br>DT_Etat_Structure : <span style="color:#ff6060">À surveiller</span></div>
+        <div style="font-size:12px;color:var(--textmuted);line-height:1.8" class="en">Python simulation 07/05/2026<br>6,049,509 points · Est/Sud edge crack<br>DT_Commentaire_Pathologie: <span style="color:#ff6060">Crack detected — H:975mm</span><br>DT_Etat_Structure: <span style="color:#ff6060">To monitor</span></div>
+      </div>
+    </div>
+    <div style="background:var(--blue1);border:1px solid rgba(30,95,168,0.3);border-radius:8px;overflow:hidden;margin-bottom:1.5rem">
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(30,95,168,0.2);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:0.5px" class="fr">Résultats comparaison cloud-to-cloud</div>
+      <div style="padding:1rem 1.5rem;border-bottom:1px solid rgba(30,95,168,0.2);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:0.5px" class="en">Cloud-to-cloud comparison results</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(30,95,168,0.2)">
+        <div style="background:var(--blue1);padding:1rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--accent)">0.007mm</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="fr">Dist. moy. Python</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="en">Python mean dist.</div>
+        </div>
+        <div style="background:var(--blue1);padding:1rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--accent)">0.011mm</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="fr">Dist. moy. CloudComp.</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="en">CloudComp. mean dist.</div>
+        </div>
+        <div style="background:var(--blue1);padding:1rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:#ff6060">40.6mm</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="fr">Écart max Python</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="en">Max gap Python</div>
+        </div>
+        <div style="background:var(--blue1);padding:1rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:#ff6060">38.4mm</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="fr">Écart max CloudComp.</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:4px" class="en">Max gap CloudComp.</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(30,95,168,0.2)">
+        <div style="background:var(--blue1);padding:0.75rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#4ecba5">99.9%</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="fr">Zone stable (vert)</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="en">Stable zone (green)</div>
+        </div>
+        <div style="background:var(--blue1);padding:0.75rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:var(--accent)">0.1%</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="fr">Zone transition (jaune)</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="en">Transition zone (yellow)</div>
+        </div>
+        <div style="background:var(--blue1);padding:0.75rem;text-align:center">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#ff6060">993 pts</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="fr">Zone fissure (rouge)</div>
+          <div style="font-size:10px;color:var(--textmuted);text-transform:uppercase;letter-spacing:1px;margin-top:2px" class="en">Crack zone (red)</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--textmuted);padding:0.9rem 1.25rem;background:rgba(255,80,80,0.05);border:1px solid rgba(255,80,80,0.2);border-radius:6px">
+      <span class="fr">⚠ La fissure présentée est <strong style="color:#ff6060">fictive et simulée algorithmiquement</strong> à des fins de démonstration du pipeline de monitoring multi-temporel. Aucune pathologie réelle n'a été détectée sur le monument André Cools lors du relevé du 24/04/2026.</span>
+      <span class="en">⚠ The crack shown is <strong style="color:#ff6060">fictitious and algorithmically simulated</strong> for pipeline demonstration purposes. No real pathology was detected on the André Cools monument during the 24/04/2026 survey.</span>
+    </div>
+  </div>
+</section>
+
+<section id="telechargements">
+  <div class="container">
+    <div class="section-tag fr">Accès aux données</div>
+    <div class="section-tag en">Data access</div>
+    <h2 class="fr">Téléchargement des données</h2>
+    <h2 class="en">Data downloads</h2>
+    <p class="section-sub fr">8 formats disponibles — chaque format indique sa compatibilité avec l'analyse multi-temporelle T0/T1. Les formats marqués ✅ sont recommandés pour le monitoring patrimonial.</p>
+    <p class="section-sub en">8 formats available — each format indicates its compatibility with multi-temporal T0/T1 analysis. Formats marked ✅ are recommended for heritage monitoring.</p>
+    <div class="dl-grid">
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.IFC</div><span class="dl-badge badge-bim">BIM · Ingénierie</span></div>
+        <div class="dl-title fr">Maquette BIM sémantisée — IFC4 · T0 &amp; T1</div>
+        <div class="dl-title en">Semantic BIM model — IFC4 · T0 &amp; T1</div>
+        <div class="dl-desc fr">Modèle BIM avec 7 paramètres DT. Disponible en version T0 (état référence) et T1 (fissure détectée — DT_Commentaire_Pathologie mis à jour). Format idéal pour tracer l'évolution structurelle dans le temps.</div>
+        <div class="dl-desc en">BIM model with 7 DT parameters. Available as T0 (reference) and T1 (crack detected — updated DT_Commentaire_Pathologie). Ideal for tracking structural evolution over time.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ✅ DT mis à jour entre T0 et T1</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ✅ DT updated between T0 and T1</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> Revit · ArchiCAD · BIMvision · Solibri</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> Revit · ArchiCAD · BIMvision · Solibri</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ T0 — 64 Ko</a><a class="dl-btn" href="#" style="border-color:rgba(255,80,80,0.4);color:#ff8080">⬇ T1 Fissure</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.RVT</div><span class="dl-badge badge-geo">Géomètre · BIM</span></div>
+        <div class="dl-title fr">Projet Revit complet — 4 640 Ko</div>
+        <div class="dl-title en">Full Revit project — 4,640 KB</div>
+        <div class="dl-desc fr">Projet Revit 2024 natif avec modèle BIM, niveaux de référence, nuage de points lié, Dashboard et vues en élévation. Format de travail complet pour géomètres et BIM managers.</div>
+        <div class="dl-desc en">Native Revit 2024 project with BIM model, reference levels, linked point cloud, Dashboard and elevation views. Complete working format for surveyors and BIM managers.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ⚠ Nécessite un projet distinct par état</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ⚠ Requires separate project per state</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> Autodesk Revit 2024 uniquement</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> Autodesk Revit 2024 only</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ Télécharger</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.E57</div><span class="dl-badge badge-geo">Géomètre · Topo</span></div>
+        <div class="dl-title fr">Nuage de points RGB — E57 · T0 &amp; T1</div>
+        <div class="dl-title en">RGB point cloud — E57 · T0 &amp; T1</div>
+        <div class="dl-desc fr">Nuage traité (6M points) avec couleurs RGB du Trimble X7. Disponible en T0 et T1 pour comparaison directe dans RealWorks ou CloudCompare. Format ISO de référence pour la comparaison multi-temporelle professionnelle.</div>
+        <div class="dl-desc en">Processed cloud (6M points) with Trimble X7 RGB colours. Available as T0 and T1 for direct comparison in RealWorks or CloudCompare. ISO reference format for professional multi-temporal comparison.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ✅ Format idéal T0/T1 — comparaison directe</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ✅ Ideal T0/T1 format — direct comparison</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> RealWorks · ReCap · CloudCompare · Leica Cyclone</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> RealWorks · ReCap · CloudCompare · Leica Cyclone</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ T0</a><a class="dl-btn" href="#" style="border-color:rgba(255,80,80,0.4);color:#ff8080">⬇ T1 Fissure</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.LAS</div><span class="dl-badge badge-geo">Géomatique · SIG</span></div>
+        <div class="dl-title fr">Nuage de points — LAS · T0 &amp; T1</div>
+        <div class="dl-title en">Point cloud — LAS · T0 &amp; T1</div>
+        <div class="dl-desc fr">Format standard historique du lidar, nativement supporté par tous les logiciels de géomatique et SIG. Disponible en T0 et T1 pour intégration dans des workflows de monitoring automatisés.</div>
+        <div class="dl-desc en">Historical lidar standard format, natively supported by all GIS and geomatics software. Available as T0 and T1 for integration into automated monitoring workflows.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ✅ Standard pour pipeline de monitoring automatisé</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ✅ Standard for automated monitoring pipeline</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> CloudCompare · QGIS · ArcGIS · Python laspy</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> CloudCompare · QGIS · ArcGIS · Python laspy</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ T0</a><a class="dl-btn" href="#" style="border-color:rgba(255,80,80,0.4);color:#ff8080">⬇ T1 Fissure</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.PLY</div><span class="dl-badge badge-dev">Dev · Recherche</span></div>
+        <div class="dl-title fr">Nuage Python — PLY · T0 &amp; T1</div>
+        <div class="dl-title en">Python cloud — PLY · T0 &amp; T1</div>
+        <div class="dl-desc fr">Nuage issu du pipeline Python Open3D (SOR + Voxel Grid 5mm). T1 inclut la fissure simulée avec couleurs orange/jaune. Format ouvert idéal pour reproduire ou étendre le pipeline de comparaison multi-temporelle.</div>
+        <div class="dl-desc en">Cloud from Python Open3D pipeline (SOR + 5mm Voxel Grid). T1 includes simulated crack with orange/yellow colours. Open format ideal for reproducing or extending the multi-temporal comparison pipeline.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ✅ T1 colorisé — carte des écarts incluse</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ✅ Colourised T1 — difference map included</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> CloudCompare · MeshLab · Blender · Python Open3D</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> CloudCompare · MeshLab · Blender · Python Open3D</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ T0</a><a class="dl-btn" href="#" style="border-color:rgba(255,80,80,0.4);color:#ff8080">⬇ T1 Fissure</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.OBJ</div><span class="dl-badge" style="background:rgba(180,41,240,0.15);color:#c47be8">Visualisation · VR</span></div>
+        <div class="dl-title fr">Maillage 3D — OBJ · 809 Ko</div>
+        <div class="dl-title en">3D mesh — OBJ · 809 KB</div>
+        <div class="dl-desc fr">Export du modèle BIM au format OBJ depuis Revit. Format universel pour visualisation 3D, infographie et réalité augmentée. Permet d'intégrer le monument dans des environnements non-BIM.</div>
+        <div class="dl-desc en">BIM model exported to OBJ from Revit. Universal format for 3D visualisation, infographics and augmented reality. Allows monument integration in non-BIM environments.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ⚠ Géométrie uniquement — sans paramètres DT</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ⚠ Geometry only — no DT parameters</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> Blender · Unity · Unreal Engine · MeshLab</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> Blender · Unity · Unreal Engine · MeshLab</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ Télécharger</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.DWG</div><span class="dl-badge badge-geo">CAO · Bureau d'études</span></div>
+        <div class="dl-title fr">Plans CAO — DWG · 99 Ko</div>
+        <div class="dl-title en">CAD drawings — DWG · 99 KB</div>
+        <div class="dl-desc fr">Export des vues Revit au format DWG. Standard de facto du dessin assisté par ordinateur, utilisé quotidiennement par les bureaux d'études et dessinateurs. Compatible avec les workflows AutoCAD existants.</div>
+        <div class="dl-desc en">Revit views exported to DWG format. De facto CAD standard used daily by design offices. Compatible with existing AutoCAD workflows.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ⚠ Plans 2D uniquement — sans données 3D</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ⚠ 2D drawings only — no 3D data</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> AutoCAD · MicroStation · ZWCAD · LibreCAD</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> AutoCAD · MicroStation · ZWCAD · LibreCAD</div>
+        <div class="dl-btns"><a class="dl-btn" href="#">⬇ Télécharger</a></div>
+      </div>
+      <div class="dl-card">
+        <div class="dl-card-top"><div class="dl-format">.PDF</div><span class="dl-badge" style="background:rgba(240,180,41,0.15);color:var(--accent)">Tous · Documentation</span></div>
+        <div class="dl-title fr">Rapport pipeline — PDF · T0 &amp; T1</div>
+        <div class="dl-title en">Pipeline report — PDF · T0 &amp; T1</div>
+        <div class="dl-desc fr">Rapport généré automatiquement par le script Python. Disponible en version T0 (traitement nuage) et T1 (comparaison multi-temporelle avec statistiques de la fissure). Traçabilité complète pour audit.</div>
+        <div class="dl-desc en">Automatically generated by the Python script. Available as T0 (cloud processing) and T1 (multi-temporal comparison with crack statistics). Complete traceability for audit.</div>
+        <div class="dl-compat fr"><strong>Multi-temporel :</strong> ✅ Rapport T1 avec statistiques comparaison</div>
+        <div class="dl-compat en"><strong>Multi-temporal:</strong> ✅ T1 report with comparison statistics</div>
+        <div class="dl-compat fr"><strong>Compatible :</strong> Tout lecteur PDF — accessible à tous</div>
+        <div class="dl-compat en"><strong>Compatible:</strong> Any PDF reader — accessible to all</div>
+        <div class="dl-btns"><a class="dl-btn" href="rapport_pipeline_TFE.pdf">⬇ Rapport T0</a><a class="dl-btn" href="rapport_comparaison_T0_T1.pdf" style="border-color:rgba(255,80,80,0.4);color:#ff8080">⬇ Rapport T1</a></div>
+      </div>
+    </div>
+    <div style="margin-top:1rem;padding:0.9rem 1.25rem;background:rgba(41,128,212,0.06);border:1px solid rgba(30,95,168,0.2);border-radius:6px;font-size:12px;color:var(--textmuted)">
+      <span class="fr">Les liens de téléchargement seront activés après hébergement définitif. Pour toute demande anticipée, contacter l'auteur.</span>
+      <span class="en">Download links will be activated after final hosting. For early access, contact the author.</span>
+    </div>
+  </div>
+</section>
+
+<section id="rapport">
+  <div class="container">
+    <div class="section-tag fr">Documentation technique</div>
+    <div class="section-tag en">Technical documentation</div>
+    <h2 class="fr">Rapport d'exécution du pipeline</h2>
+    <h2 class="en">Pipeline execution report</h2>
+    <p class="section-sub fr">Rapport généré automatiquement par le script Python — traçabilité complète du traitement.</p>
+    <p class="section-sub en">Report automatically generated by the Python script — complete processing traceability.</p>
+    <div class="rapport-box">
+      <div class="rapport-header">
+        <div class="rapport-icon">📄</div>
+        <div class="rapport-meta">
+          <h3 class="fr">Rapport pipeline — Monument André Cools</h3>
+          <h3 class="en">Pipeline report — André Cools monument</h3>
+          <p class="fr">Généré le 03/05/2026 · Python 3.10 · Open3D · Anaconda/Spyder · Trimble X7</p>
+          <p class="en">Generated 03/05/2026 · Python 3.10 · Open3D · Anaconda/Spyder · Trimble X7</p>
+        </div>
+      </div>
+      <div class="rapport-stats">
+        <div class="rstat"><div class="rstat-val">10M</div><div class="rstat-lbl fr">Points bruts</div><div class="rstat-lbl en">Raw points</div></div>
+        <div class="rstat"><div class="rstat-val">6M</div><div class="rstat-lbl fr">Points traités</div><div class="rstat-lbl en">Processed</div></div>
+        <div class="rstat"><div class="rstat-val">40%</div><div class="rstat-lbl fr">Réduction</div><div class="rstat-lbl en">Reduction</div></div>
+        <div class="rstat"><div class="rstat-val">1.5mm</div><div class="rstat-lbl fr">RMSE moyen</div><div class="rstat-lbl en">Mean RMSE</div></div>
+      </div>
+      <div class="rapport-body">
+        <div class="rapport-steps">
+          <div class="rstep"><div class="rstep-num">1</div><div style="flex:1"><div class="rstep-title fr">Chargement du nuage brut</div><div class="rstep-title en">Raw cloud loading</div><div class="rstep-desc fr">E57 · 10 090 568 points · Couleurs RGB ✓</div><div class="rstep-desc en">E57 · 10,090,568 points · RGB colours ✓</div></div><div class="rstep-tag">E57</div></div>
+          <div class="rstep"><div class="rstep-num">2</div><div style="flex:1"><div class="rstep-title fr">Filtrage SOR — suppression des outliers</div><div class="rstep-title en">SOR filtering — outlier removal</div><div class="rstep-desc fr">10 606 points supprimés (0.11%)</div><div class="rstep-desc en">10,606 points removed (0.11%)</div></div><div class="rstep-tag">SOR</div></div>
+          <div class="rstep"><div class="rstep-num">3</div><div style="flex:1"><div class="rstep-title fr">Décimation Voxel Grid 5mm</div><div class="rstep-title en">5mm Voxel Grid decimation</div><div class="rstep-desc fr">6 049 509 points · Réduction 40%</div><div class="rstep-desc en">6,049,509 points · 40% reduction</div></div><div class="rstep-tag">Voxel</div></div>
+          <div class="rstep"><div class="rstep-num">4</div><div style="flex:1"><div class="rstep-title fr">Validation métrique et export</div><div class="rstep-title en">Metric validation and export</div><div class="rstep-desc fr">RMSE 1.529mm · σ 0.958mm · PLY + E57</div><div class="rstep-desc en">RMSE 1.529mm · σ 0.958mm · PLY + E57</div></div><div class="rstep-tag">✓</div></div>
+        </div>
+        <div style="margin-top:1.25rem;text-align:center">
+          <a class="dl-btn" href="#" style="display:inline-flex;margin:0 auto">
+            ⬇ <span class="fr">Télécharger le rapport PDF complet</span><span class="en">Download full PDF report</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logos">
+      <img src="images/logo_hepl.png" alt="HEPL">
+      <div class="footer-divider"></div>
+      <img src="images/logo_geotop.png" alt="Geotop">
+    </div>
+    <div class="footer-text fr">
+      <strong>Louis Frontain</strong> · Master Ingénieur Industriel Géomètre<br>
+      Haute École de la Province de Liège · TFE 2026<br>
+      <span style="font-size:11px;opacity:0.5">Jumeau Numérique d'Instance — Monument André Cools, Flémalle-Haute</span>
+    </div>
+    <div class="footer-text en">
+      <strong>Louis Frontain</strong> · Master Industrial Surveying Engineer<br>
+      Haute École de la Province de Liège · Thesis 2026<br>
+      <span style="font-size:11px;opacity:0.5">Instance Digital Twin — André Cools Monument, Flémalle-Haute</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navLabels={fr:{home:'Accueil',pipeline:'Pipeline',visu:'Visualisation 3D',analyse:'Analyse T0→T1',dl:'Téléchargements',rapport:'Rapport'},en:{home:'Home',pipeline:'Pipeline',visu:'3D View',analyse:'T0→T1 Analysis',dl:'Downloads',rapport:'Report'}};
+function setLang(l){
+  document.body.className=l==='en'?'lang-en':'';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent===l.toUpperCase()));
+  const lb=navLabels[l];
+  document.getElementById('nav-home').textContent=lb.home;
+  document.getElementById('nav-pipeline').textContent=lb.pipeline;
+  document.getElementById('nav-visu').textContent=lb.visu;
+  document.getElementById('nav-analyse').textContent=lb.analyse;
+  document.getElementById('nav-dl').textContent=lb.dl;
+  document.getElementById('nav-rapport').textContent=lb.rapport;
+  document.querySelectorAll('.visu-tab.fr').forEach(t=>t.style.display=l==='en'?'none':'');
+  document.querySelectorAll('.visu-tab.en').forEach(t=>t.style.display=l==='en'?'':'none');
+}
+function switchVisu(type){
+  document.querySelectorAll('.visu-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.visu-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+type).classList.add('active');
+  document.querySelectorAll('.visu-tab').forEach(t=>{
+    if(t.getAttribute('onclick').includes(type))t.classList.add('active');
+  });
+}
+const sections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));});},{threshold:0.4});
+sections.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
