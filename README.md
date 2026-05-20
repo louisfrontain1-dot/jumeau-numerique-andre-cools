@@ -1,7 +1,7 @@
 # Jumeau Numérique d'Instance — Monument André Cools
 
 **TFE 2026 · Master Ingénieur Industriel Géomètre · HEPL Liège**  
-*Louis Frontain — supervisé par F. Preud'homme & B. Jonlet*
+*Louis Frontain — supervisé par B. Jonlet*
 
 🌐 **[Voir le site interactif](https://louisfrontain1-dot.github.io/jumeau-numerique-andre-cools/)**
 
@@ -82,7 +82,7 @@ Le pipeline développé transforme un relevé TLS brut de 111 millions de points
 
 - **Établissement** : Haute École de la Province de Liège (HEPL), Quai Gloesener 6, 4020 Liège
 - **Formation** : Master en Sciences de l'Ingénieur Industriel — orientation Géomètre
-- **Promoteurs** : M. Frédéric Preud'homme · M. Benoît Jonlet
+- **Promoteurs** : M. Benoît Jonlet
 - **Stage** : Geotop SA, Liège
 - **Année académique** : 2025–2026
 
